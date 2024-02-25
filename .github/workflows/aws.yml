@@ -13,12 +13,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+      
       - name: Checkout Source
         uses: actions/checkout@v3
+      
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      
+      # Modified step to include the path to the Dockerfile
       - name: Build Docker Image
-        run: docker build -t boopathys98/learncloud:hello-world .
+        run: docker build -t boopathys98/learncloud:hello-world -f /Dockerfile .
+        # Ensure you replace `path/to/Dockerfile` with the actual path to your Dockerfile within the repository
+      
       - name: Publish Image to Docker Hub
         run: docker push boopathys98/learncloud:hello-world
 
@@ -28,9 +34,11 @@ jobs:
     steps:
       - name: Pull Image from Docker Hub
         run: docker pull boopathys98/learncloud:hello-world
+      
       - name: Stop and Remove Old Container
         run: |
           docker stop reactContainer || true
           docker rm reactContainer || true
+      
       - name: Run New Docker Container
         run: docker run -d -p 3000:3000 --name reactContainer boopathys98/learncloud:hello-world
