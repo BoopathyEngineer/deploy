@@ -18,12 +18,11 @@ jobs:
         uses: actions/checkout@v3
       
       - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       
-      # Modified step to include the path to the Dockerfile
       - name: Build Docker Image
-        run: docker build -t boopathys98/learncloud:hello-world -f /Dockerfile .
-        # Ensure you replace `path/to/Dockerfile` with the actual path to your Dockerfile within the repository
+        run: docker build -t boopathys98/learncloud:hello-world .
       
       - name: Publish Image to Docker Hub
         run: docker push boopathys98/learncloud:hello-world
