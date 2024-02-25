@@ -1,5 +1,4 @@
 name: CICD Workflow
-
 on:
   push:
     branches:
